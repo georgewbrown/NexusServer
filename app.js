@@ -9,7 +9,7 @@ const bodyParser = require('body-parser');
 
 const business = require('./controllers/businesscontroller');
 const employee = require('./controllers/employeecontroller');
-// const post = require('./controllers/postcontroller');
+const post = require('./controllers/postcontroller');
 
 sequelize.sync(); //tip: {force:true} for resetting
 app.use(bodyParser.json());
@@ -17,7 +17,7 @@ app.use(require('./middleware/headers'))
 
 app.use('/business',business)
 app.use('/employee',employee)
-// app.use('/post',post)
+app.use('/post',post)
 
 app.use(require('./middleware/validate-session'))
 

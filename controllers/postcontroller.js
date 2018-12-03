@@ -9,47 +9,34 @@ const bcrypt = require('bcryptjs');
 const validateSession = require('../middleware/validate-session')
 
 
-router.post('/signup', (req, res) => {
-  let name = req.body.name
-  let password = req.body.password
-  let email = req.body.email
-  let phoneNumber = req.body.phoneNumber
-  let location = req.body.location
-  let website = req.body.website
-  let about = req.body.about
-  let rating = req.body.rating
-  Post.create({
-          name: name,
-          password: bcrypt.hashSync(password, 10), 
-          email: email, 
-          phoneNumber: phoneNumber,           
-          location: location,
-          website: website,
-          about: about,
-          rating: rating
-      })
-      .then( 
-          signupSuccess = (Post) => {
-          var token = jwt.sign({id: Post.id}, process.env.JWT_SECRET, {expiresIn: 60*60*24})  /// left off here
-              res.json({
-                  Post: Post,
-                  message: "User created",
-                  sessionToken: token
-              })
-          },
-          createError = err => res.send(500, err)
-        
-      )
+// post a new post 
+// req.body is the post object
+router.post('/create', (req, res, next) => {
+    Post.create(req.body)
+    .then(
+        function createPostSuccess (post) {
+            let token = jwt.sign({ id: post.id }, 'JWT_SECRET',{expiresIn: 60*60*24});
+                res.status(200).json ({
+                Post: post,
+                message: 'New Post Created!',
+                sessionToken: token
+            })
+        },
+        function createPostFail(err) {
+            res.status(500).send(err.message)       
+        }
+    )
 })
+
 
 router.post('/signin', (req, res) => {
     Post.findOne({ where: { email: req.body.email } }).then (Post => {
         if (Post) {
             bcrypt.compare(req.body.password, Post.password, (err, matches) => {
                 if(Post) {
-                    let token = jwt.sign({ id: Post.id }, process.env.JWT_SECRET, { expiresIn: 60*60*24 });
+                    let token = jwt.sign({ id: post.id }, process.env.JWT_SECRET, { expiresIn: 60*60*24 });
                     res.json({
-                        Post: Post,
+                        post: post,
                         message: 'Successfully authenticated.',
                         sessionToken: token
                     });
@@ -58,7 +45,7 @@ router.post('/signin', (req, res) => {
                 }
             });
         } else {
-            res.status(403).send({ error: 'User not found.' })
+            res.status(403).send({ error: 'Post not found.' })
         }
     })
 })
