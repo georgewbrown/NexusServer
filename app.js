@@ -37,4 +37,4 @@ app.use('/post',post)
 //     })
 // });
 
-app.listen(3000, () => {console.log('⚙️ ⚙️ ⚙️ Spining Gears on port 3000!⚙️ ⚙️ ⚙️')});
+app.listen(process.env.PORT, () => {console.log('⚙️ ⚙️ ⚙️ Spining Gears on port 3000!⚙️ ⚙️ ⚙️')});
