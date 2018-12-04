@@ -1,8 +1,9 @@
 module.exports = (sequelize, DataTypes) => {
     const Business = sequelize.define('business', {
+        // THIS VALUE CANNOT BE NULL
     name:{
         type: DataTypes.STRING,
-        allowNull: true,
+        allowNull: false,
         unique: true,
         validate: {
             len: [0, 255]
@@ -22,6 +23,15 @@ module.exports = (sequelize, DataTypes) => {
             isEmail: true,
         }
     },
+     // THIS VALUE CANNOT BE NULL
+    about:{
+        type: DataTypes.STRING(1000),
+        alowNull: false,
+    },
+    profilePicture:{
+        type: DataTypes.STRING,
+        allowNull: true,
+    },
     phoneNumber:{
         type: DataTypes.STRING,
         allowNull: true,
@@ -34,9 +44,21 @@ module.exports = (sequelize, DataTypes) => {
         type: DataTypes.STRING,
         allowNull: true,
     },
-    about:{
-        type: DataTypes.STRING(1000),
-        alowNull: true,
+    linkdin:{
+        type: DataTypes.STRING,
+        allowNull: true,
+    },
+    faceBook:{
+        type: DataTypes.STRING,
+        allowNull: true,
+    },
+    instagram:{
+        type: DataTypes.STRING,
+        allowNull: true,
+    },
+    twitter:{
+        type: DataTypes.STRING,
+        allowNull: true,
     },
     rating: {
         type: DataTypes.INTEGER,
