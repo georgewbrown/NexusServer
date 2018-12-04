@@ -1,8 +1,9 @@
 module.exports = (sequelize, DataTypes) => {
     const Employee = sequelize.define('employee', {
+    // THIS VALUE CANNOT BE NULL
     name:{
         type: DataTypes.STRING,
-        allowNull: true,
+        allowNull: false,
         unique: true,
         validate: {
             len: [0, 255]
@@ -22,6 +23,10 @@ module.exports = (sequelize, DataTypes) => {
             isEmail: true,
         }
     },
+    profilePicture:{
+        type: DataTypes.STRING,
+        allowNull: true,
+    },
     phoneNumber:{
         type: DataTypes.STRING,
         allowNull: true,
@@ -34,6 +39,19 @@ module.exports = (sequelize, DataTypes) => {
         type: DataTypes.STRING,
         allowNull: true,
     },
+    faceBook:{
+        type: DataTypes.STRING,
+        allowNull: true,
+    },
+    instagram:{
+        type: DataTypes.STRING,
+        allowNull: true,
+    },
+    twitter:{
+        type: DataTypes.STRING,
+        allowNull: true,
+    },
+
     skills:{
         type: DataTypes.ENUM(
         "Auditing",
