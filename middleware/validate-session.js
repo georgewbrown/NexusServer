@@ -1,3 +1,5 @@
+require('dotenv').config();
+
 const jwt = require('jsonwebtoken');
 const sequelize = require('../db')
 var Business = sequelize.import('../models/business');

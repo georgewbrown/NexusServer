@@ -11,15 +11,13 @@ const validateSession = require('../middleware/validate-session')
 
 // post a new post 
 // req.body is the post object
-router.post('/create', (req, res, next) => {
+router.post('/create', validateSession, (req, res, next) => {
     Post.create(req.body)
     .then(
         function createPostSuccess (post) {
-            let token = jwt.sign({ id: post.id }, 'JWT_SECRET',{expiresIn: 60*60*24});
                 res.status(200).json ({
                 Post: post,
                 message: 'New Post Created!',
-                sessionToken: token
             })
         },
         function createPostFail(err) {
@@ -29,65 +27,14 @@ router.post('/create', (req, res, next) => {
 })
 
 
-router.post('/signin', (req, res) => {
-    Post.findOne({ where: { email: req.body.email } }).then (Post => {
-        if (Post) {
-            bcrypt.compare(req.body.password, Post.password, (err, matches) => {
-                if(Post) {
-                    let token = jwt.sign({ id: post.id }, process.env.JWT_SECRET, { expiresIn: 60*60*24 });
-                    res.json({
-                        post: post,
-                        message: 'Successfully authenticated.',
-                        sessionToken: token
-                    });
-                } else {
-                    res.status(502).send({ error: 'Passwords do not match.' })
-                }
-            });
-        } else {
-            res.status(403).send({ error: 'Post not found.' })
-        }
-    })
-})
-
-router.get('/all', (req, res) => {
-    Post.findAll()
-    .then(
-        function findAllSuccess(Post) {
-            res.status(200).json({
-                Post
-            })
-        },
-
-        function findAllError(err) {
-            res.status(500).send("Could not All the Post's!")
-        }
-    )
-})
-
-  router.get('/:id', (req, res) => {
-    Post.findOne({ where: {id: req.params.id } })
-    .then(Post => res.status(200).json(Post))
-    .catch(err => res.status(500).json(err))
-})
-
 router.put('/update/:id', validateSession,(req, res) => {
-    Post.update({
-     name: req.body.name,
-     password: req.body.password,
-     email: req.body.email,
-     phoneNumber: req.body.phoneNumber,
-     location: req.body.location,
-     website: req.body.website,
-     about: req.body.about,
-     rating: req.body.rating
-    },
+    Post.create(req.body),
         {
         where: {
             id: req.params.id,
             // name: req.params.name
         }
-    })
+    } 
     .then(
         function updateSuccess(Post) {
             res.status(200).json({

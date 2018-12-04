@@ -120,7 +120,7 @@ router.put('/update/:id', validateSession,(req, res) => {
     )
 })
 
-router.delete('/delete/:id', validateSession,(req, res) => {
+router.delete('/delete/:id', (req, res) => {
     Employee.destroy({
         where: {
             id: req.params.id,

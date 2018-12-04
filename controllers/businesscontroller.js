@@ -95,7 +95,7 @@ router.get('/all', (req, res) => {
     .catch(err => res.status(500).json(err))
 })
 
-router.put('/update/:id', validateSession,(req, res) => {
+router.put('/update/:id',(req, res) => {
     Business.update({
    name: req.body.name,
    password: req.body.password,
@@ -133,7 +133,7 @@ router.put('/update/:id', validateSession,(req, res) => {
     )
 })
 
-router.delete('/delete/:id', validateSession,(req, res) => {
+router.delete('/delete/:id',(req, res) => {
     Business.destroy({
         where: {
             id: req.params.id,
