@@ -45,24 +45,24 @@ router.post('/signup', (req, res) => {
 })
 
 router.post('/signin', (req, res) => {
-    Employee.findOne({ where: { email: req.body.email } }).then (employee => {
-        if (employee) {
-            bcrypt.compare(req.body.password, employee.password, (err, matches) => {
-                if(employee) {
-                    let token = jwt.sign({ id: employee.id }, process.env.JWT_SECRET, { expiresIn: 60*60*24 });
-                    res.json({
-                        employee: employee,
-                        message: 'Successfully authenticated.',
-                        sessionToken: token
-                    });
-                } else {
-                    res.status(502).send({ error: 'Passwords do not match.' })
-                }
+    let username = req.body.name,
+        password = req.body.password,
+        email = req.body.email;
+    let conditions = !!username ? { name: username } : { email: email };
+    console.log(conditions)
+    Employee.findOne(conditions, (err, Employee) => {
+        if (err) return done(err);
+        if (!Employee) return done(new Error('Incorrect username or email'));
+
+        return Employee.comparePassword(password, Employee.password)
+            .then(match => {
+                if (match) return done();
+                else return done(new Error('Incorrect password'));
+            })
+            .catch(error => {
+                if (error) return done(new Error(`Unable to validated password. - ${error}`));
             });
-        } else {
-            res.status(403).send({ error: 'User not found.' })
-        }
-    })
+    });
 })
 
 router.get('/all', (req, res) => {
