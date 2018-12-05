@@ -6,8 +6,8 @@ var sequelize = require('../db');
 var Employee = sequelize.import('../models/employee')
 var jwt = require('jsonwebtoken');
 const bcrypt = require('bcryptjs');
-const validateSession = require('../middleware/validate-session')
-
+const validateSession = require('../middleware/validate-session');
+const Op = sequelize.Op
 
 router.post('/signup', (req, res) => {
   let name = req.body.name
@@ -43,26 +43,35 @@ router.post('/signup', (req, res) => {
         
       )
 })
-
 router.post('/signin', (req, res) => {
-    let username = req.body.name,
-        password = req.body.password,
-        email = req.body.email;
-    let conditions = !!username ? { name: username } : { email: email };
-    console.log(conditions)
-    Employee.findOne(conditions, (err, Employee) => {
-        if (err) return done(err);
-        if (!Employee) return done(new Error('Incorrect username or email'));
-
-        return Employee.comparePassword(password, Employee.password)
-            .then(match => {
-                if (match) return done();
-                else return done(new Error('Incorrect password'));
-            })
-            .catch(error => {
-                if (error) return done(new Error(`Unable to validated password. - ${error}`));
-            });
-    });
+    let username = req.body.name
+    let password = req.body.password
+    let email = req.body.email
+    console.log(username, email, password)
+    Employee.findOne({where: {[Op.or]: [{email: email}, {name: username}]}})
+        .then(
+            function (user) {
+                if (user) {
+                    bcrypt.compare(password, user.password,  (err, matches)  =>{
+                        if (matches) {
+                            let token = jwt.sign({ id: user.id }, process.env.JWT_SECRET)
+                            res.json({
+                                user: user,
+                                message: "successfully authenticated user",
+                                sessionToken: token
+                            })
+                        } else {
+                            res.status(502).send({ error: "failed to find user" })
+                        }
+                    })
+                } else {
+                    res.status(500).send({ error: "failed to authenticate user" })
+                }
+            },
+            function (err) {
+                res.status(501).send({ err: "something went wrong" })
+            }
+        )
 })
 
 router.get('/all', (req, res) => {

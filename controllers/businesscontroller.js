@@ -57,7 +57,7 @@ router.post('/signin', (req, res) => {
     Business.findOne({ where: { name: req.body.name } }).then (business => {
         if (business) {
             bcrypt.compare(req.body.password, business.password, (err, matches) => {
-                if(business) {
+                if(matches) {
                     let token = jwt.sign({ id: business.id }, process.env.JWT_SECRET, { expiresIn: 60*60*24 });
                     res.json({
                         business: business,
