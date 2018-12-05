@@ -14,13 +14,20 @@ const Employee = sequelize.import('../models/employee');
       else {
           jwt.verify(sessionToken, process.env.JWT_SECRET, (err, decoded) => {
               if (decoded) {
-                  User.findOne({ where: { id: decoded.id } }).then(user => {
-                      req.user = user;
+                  Business.findOne({ where: { id: decoded.id } }).then(business => {
+                      req.business = business;
                       next();
-                  },
-                      function () {
-                          res.status(401).send({ error: "Not authorized" })
-                      })
+                  })
+                } else if (decoded) {
+                    Employee.findOne({ where: { id: decoded.id } }).then(employee => {
+                        req.employee = employee;
+                        next();
+                    })  
+                } else if (decoded) {
+                    () => {
+                        res.status(401).send({ error: "Not authorized" })
+
+                }
               } else {
                   res.status(400).send({ error: "Not authorized" })
               }

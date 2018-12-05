@@ -50,7 +50,7 @@ router.post('/signin', (req, res) => {
     console.log(username, email, password)
     Employee.findOne({where: {[Op.or]: [{email: email}, {name: username}]}})
         .then(
-            function (user) {
+            (user) => {
                 if (user) {
                     bcrypt.compare(password, user.password,  (err, matches)  =>{
                         if (matches) {
