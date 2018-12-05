@@ -13,7 +13,10 @@ module.exports = (sequelize, DataTypes) => {
         allowNull: false,
     },
     skills:{
-        type: DataTypes.ENUM(
+        type: DataTypes.ENUM,
+        values:
+        [
+        "",
         "Auditing",
         "AutoCAD",
         "Automotive",
@@ -162,8 +165,8 @@ module.exports = (sequelize, DataTypes) => {
         "Record keeping",
         "Data entry",
         "Search engine optimization(SEO)",
-        ),
-        alowNull: true,
+        ],
+        alowNull: false,
     },
     jobDescription:{
         type: DataTypes.STRING,
