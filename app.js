@@ -20,9 +20,6 @@ app.use(require('./middleware/headers'))
 
 app.use('/business',business)
 app.use('/employee',employee)
-
-app.use(require('./middleware/validate-session'))
-
 app.use('/post',post)
 
 // app.use((req, res, next) => {

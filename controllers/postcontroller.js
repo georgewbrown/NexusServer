@@ -26,6 +26,27 @@ router.post('/create', validateSession, (req, res, next) => {
     )
 })
 
+router.get('/all', (req, res) => {
+    Post.findAll()
+    .then(
+        function findAllSuccess(post) {
+            res.status(200).json({
+            post
+            })
+        },
+
+        function findAllError(err) {
+            res.status(500).send("Could not All the Post's!")
+        }
+    )
+})
+
+router.get('/:id', (req, res) => {
+    Post.findOne({ where: {id: req.params.id } })
+    .then(post => res.status(200).json(post))
+    .catch(err => res.status(500).json(err))
+})
+
 
 router.put('/update/:id', validateSession,(req, res) => {
     Post.create(req.body),
