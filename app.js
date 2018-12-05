@@ -11,7 +11,7 @@ const business = require('./controllers/businesscontroller');
 const employee = require('./controllers/employeecontroller');
 const post = require('./controllers/postcontroller');
 
-sequelize.sync({force:true}); //tip: {force:true} for resetting
+sequelize.sync(); //tip: {force:true} for resetting
 //logging middleware - written by Fullstack's own Gabriel Lebec!
 app.use(bodyParser.json());
 //body parsing middleware
