@@ -74,20 +74,25 @@ router.post('/signin', (req, res) => {
     })
 })
 
-router.get('/all', (req, res) => {
-    Business.findAll()
-    .then(
-        function findAllSuccess(business) {
-            res.status(200).json({
-                business
-            })
-        },
+// router.get('/all', (req, res) => {
+//     Business.findAll()
+//     .then(
+//         function findAllSuccess(business) {
+//             res.status(200).json({
+//                 business
+//             })
+//         },
 
-        function findAllError(err) {
-            res.status(500).send("Could not All the Post's!")
-        }
-    )
-})
+//         function findAllError(err) {
+//             res.status(500).send("Could not All the Post's!")
+//         }
+//     )
+// })
+router.get('/', (req, res, next) => {
+    Business.findAll()
+      .then(res.send.bind(res))
+      .catch(next)
+  });
 
   router.get('/:id', (req, res) => {
     Business.findOne({ where: {id: req.params.id } })

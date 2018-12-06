@@ -1,3 +1,4 @@
+// 'use strict';
 module.exports = (sequelize, DataTypes) => {
     const Business = sequelize.define('business', {
         // THIS VALUE CANNOT BE NULL
@@ -68,7 +69,8 @@ module.exports = (sequelize, DataTypes) => {
             min: 1,
             max: 5
             }
-        }
+        },
+        
     });
     return Business;
 }

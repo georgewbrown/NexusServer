@@ -152,12 +152,11 @@ const postData = [
 // Sync and restart db before seeding
 db.sync() //{ force: true }
 .then(() => {
-//   console.log('synced DB and dropped old data');
 })
 // here, we go through all the models one by one, create each
 // element from the seed arrays above, and log how many are created
 .then(() => {
-  return Promise.map(businessData, (business) => {
+  return Promise.map(businessData, function (business) {
     return Business.create(business);
   })
 })

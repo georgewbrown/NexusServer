@@ -13,6 +13,7 @@ const post = require('./controllers/postcontroller');
 
 sequelize.sync(); //tip: {force:true} for resetting
 //logging middleware - written by Fullstack's own Gabriel Lebec!
+app.use(volleyball);
 app.use(bodyParser.json());
 //body parsing middleware
 app.use(bodyParser.urlencoded({extended: true}));

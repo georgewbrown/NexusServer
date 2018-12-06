@@ -32,7 +32,7 @@ router.post('/signup', (req, res) => {
       })
       .then( 
           signupSuccess = (employee) => {
-          var token = jwt.sign({id: employee.id}, process.env.JWT_SECRET, {expiresIn: 60*60*24})  /// left off here
+          var token = jwt.sign({id: employee.id}, process.env.JWT_SECRET, {expiresIn: 60*60*24}) 
               res.json({
                   employee: employee,
                   message: "User created",
