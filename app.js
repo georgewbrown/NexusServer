@@ -5,16 +5,16 @@ const express = require('express');
 const app = express();
 
 const sequelize = require('./db');
-const volleyball = require('volleyball');
 const bodyParser = require('body-parser');
 
 const business = require('./controllers/businesscontroller');
 const employee = require('./controllers/employeecontroller');
 const post = require('./controllers/postcontroller');
 
+const volleyball = require('volleyball');
 
-//Logging and body parsing middleware does not have a path argument
-//but just a callback function. If the first argument to an app.use call
+// Logging and body parsing middleware does not have a path argument
+// but just a callback function. If the first argument to an app.use call
 // is a callback, it always matches that middleware on every request.
 
 //logging middleware - written by Fullstack's own Gabriel Lebec!
@@ -22,7 +22,6 @@ app.use(volleyball);
 //body parsing middleware
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: true}));
-
 app.use(require('./middleware/headers'))
 
 
@@ -35,7 +34,7 @@ app.use('/post',post)
 app.use('*', (req, res, next) => {
     res.send('this is the default route');
   });
-  
+
 // actually start the server
 const server = app.listen(process.env.PORT, () => {
   // this is an async callback, so the server.address().port is available

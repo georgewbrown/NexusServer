@@ -3,9 +3,7 @@ require('dotenv').config();
 var express = require('express');
 var router = express.Router();
 var sequelize = require('../db');
-var Post = sequelize.import('../models/post')
-var jwt = require('jsonwebtoken');
-const bcrypt = require('bcryptjs');
+var Post =  sequelize.import('../models/post')
 const validateSession = require('../middleware/validate-session')
 
 
@@ -48,18 +46,23 @@ router.get('/:id', (req, res) => {
 })
 
 
-router.put('/update/:id', validateSession,(req, res) => {
-    Post.create(req.body),
+router.put('/update/:id',(req, res) => {
+   Post.update({
+   jobTitle: req.body.jobTitle,
+   location: req.body.location,
+   payRange: req.body.payRange,
+   skills: req.body.skills,
+   jobDescription: req.body.jobDescription
+    },
         {
         where: {
             id: req.params.id,
-            // name: req.params.name
         }
-    } 
+    })
     .then(
-        function updateSuccess(Post) {
+        function updateSuccess(post) {
             res.status(200).json({
-                Post: Post,
+                Post: post,
                 message: "Post successfully updated!"
             })
         },
@@ -72,6 +75,17 @@ router.put('/update/:id', validateSession,(req, res) => {
     )
 })
 
+router.put('/:id/business', (req, res, next) => {
+    Post.update(req.body.businessId),{ where: {id: req.params.id,}} 
+      .then(foundBusiness => {
+        if (!foundBusiness) res.sendStatus(404);
+        // return foundBusiness.setPost(req.body.businessId)
+        return foundBusiness.update({businessId: req.body.businessId})
+      })
+      .then(res.send.bind(res))
+      .catch(next);
+  });
+
 router.delete('/delete/:id', validateSession,(req, res) => {
     Post.destroy({
         where: {
@@ -80,9 +94,9 @@ router.delete('/delete/:id', validateSession,(req, res) => {
         }
     })
     .then(
-        function deleteSuccess(Post) {
+        function deleteSuccess(post) {
             res.status(200).json({
-                Post: Post,
+                Post: post,
                 message: "Post Successfully deleted"
             })
         },

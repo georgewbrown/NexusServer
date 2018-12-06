@@ -3,10 +3,10 @@ require('dotenv').config();
 var express = require('express');
 var router = express.Router();
 var sequelize = require('../db');
-var Business = sequelize.import('../models/business')
+var Business =  sequelize.import('../models/business')
 var jwt = require('jsonwebtoken');
 const bcrypt = require('bcryptjs');
-const validateSession = require('../middleware/validate-session')
+const Op = sequelize.Op
 
 
 router.post('/signup', (req, res) => {
@@ -41,7 +41,7 @@ router.post('/signup', (req, res) => {
       })
       .then( 
           signupSuccess = (business) => {
-          var token = jwt.sign({id: business.id}, process.env.JWT_SECRET, {expiresIn: 60*60*24})  /// left off here
+          var token = jwt.sign({id: business.id}, process.env.JWT_SECRET, {expiresIn: 60*60*24}) 
               res.json({
                   business: business,
                   message: "User created",
@@ -54,42 +54,40 @@ router.post('/signup', (req, res) => {
 })
 
 router.post('/signin', (req, res) => {
-    Business.findOne({ where: { name: req.body.name } }).then (business => {
-        if (business) {
-            bcrypt.compare(req.body.password, business.password, (err, matches) => {
-                if(matches) {
-                    let token = jwt.sign({ id: business.id }, process.env.JWT_SECRET, { expiresIn: 60*60*24 });
-                    res.json({
-                        business: business,
-                        message: 'Successfully authenticated.',
-                        sessionToken: token
-                    });
+    let username = req.body.name
+    let password = req.body.password
+    let email = req.body.email
+    console.log(username, email, password)
+    Business.findOne({where: {[Op.or]: [{email: email}, {name: username}]}})
+        .then(
+            (business) => {
+                if (business) {
+                    bcrypt.compare(password, business.password,  (err, matches)  =>{
+                        if (matches) {
+                            let token = jwt.sign({ id: business.id }, process.env.JWT_SECRET)
+                            res.json({
+                                business: business,
+                                message: "successfully authenticated",
+                                sessionToken: token
+                            })
+                        } else {
+                            res.status(502).send({ error: "failed to find business" })
+                        }
+                    })
                 } else {
-                    res.status(502).send({ error: 'Passwords do not match.' })
+                    res.status(500).send({ error: "failed to authenticate business" })
                 }
-            });
-        } else {
-            res.status(403).send({ error: 'User not found.' })
-        }
-    })
+            },
+            function (err) {
+                res.status(501).send({ err: "something went wrong" })
+            }
+        )
 })
 
-// router.get('/all', (req, res) => {
-//     Business.findAll()
-//     .then(
-//         function findAllSuccess(business) {
-//             res.status(200).json({
-//                 business
-//             })
-//         },
-
-//         function findAllError(err) {
-//             res.status(500).send("Could not All the Post's!")
-//         }
-//     )
-// })
 router.get('/all', (req, res, next) => {
-    Business.findAll()
+    Business.findAll({
+        include: [{all: true}]
+    })
       .then(res.send.bind(res))
       .catch(next)
   });
@@ -142,7 +140,7 @@ router.delete('/delete/:id',(req, res) => {
     Business.destroy({
         where: {
             id: req.params.id,
-            // username: req.params.username
+            // businessname: req.params.username
         }
     })
     .then(

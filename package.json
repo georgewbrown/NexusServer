@@ -5,7 +5,10 @@
   "main": "app.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "node  app.js"
+    "start": "nodemon app.js",
+    "seed": "node seed.js",
+    "seed:associations": "node seedAssociations.js",
+    "seed:all": "node seed.js && node seedAssociations.js"
   },
   "author": "Nexus Team",
   "license": "ISC",

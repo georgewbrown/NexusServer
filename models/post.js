@@ -1,3 +1,6 @@
+let sequelize = require('../db');
+let Business =  sequelize.import('../models/business')
+
 module.exports = (sequelize, DataTypes) => {
     const Post = sequelize.define('post', {
     jobTitle:{
@@ -173,5 +176,9 @@ module.exports = (sequelize, DataTypes) => {
         allowNull: false,
     }
     });
+    Business.hasMany(Post)
+    Post.belongsTo(Business, {foreignKey: 'businessId'});    
+    
     return Post;
+
 }

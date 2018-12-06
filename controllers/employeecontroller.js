@@ -35,7 +35,7 @@ router.post('/signup', (req, res) => {
           var token = jwt.sign({id: employee.id}, process.env.JWT_SECRET, {expiresIn: 60*60*24}) 
               res.json({
                   employee: employee,
-                  message: "User created",
+                  message: "employee created",
                   sessionToken: token
               })
           },
@@ -43,29 +43,30 @@ router.post('/signup', (req, res) => {
         
       )
 })
+
 router.post('/signin', (req, res) => {
     let username = req.body.name
     let password = req.body.password
     let email = req.body.email
     console.log(username, email, password)
     Employee.findOne({where: {[Op.or]: [{email: email}, {name: username}]}})
-        .then(
-            (user) => {
-                if (user) {
-                    bcrypt.compare(password, user.password,  (err, matches)  =>{
+    .then((employee) => {
+                if (employee) {
+                    console.log("employee")
+                    bcrypt.compare(password, employee.password, (err, matches) => {
                         if (matches) {
-                            let token = jwt.sign({ id: user.id }, process.env.JWT_SECRET)
+                            let token = jwt.sign({ id: employee.id }, process.env.JWT_SECRET)
                             res.json({
-                                user: user,
-                                message: "successfully authenticated user",
+                                employee: employee,
+                                message: "successfully authenticated employee",
                                 sessionToken: token
-                            })
+                            });
                         } else {
-                            res.status(502).send({ error: "failed to find user" })
+                            res.status(502).send({ error: "failed to find employee" })
                         }
                     })
                 } else {
-                    res.status(500).send({ error: "failed to authenticate user" })
+                    res.status(500).send({ error: "failed to authenticate employee" })
                 }
             },
             function (err) {
@@ -133,7 +134,6 @@ router.delete('/delete/:id', (req, res) => {
     Employee.destroy({
         where: {
             id: req.params.id,
-            // username: req.params.username
         }
     })
     .then(
