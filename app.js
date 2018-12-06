@@ -19,6 +19,9 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: true}));
 app.use(require('./middleware/headers'))
 
+app.use('*', (req, res, next) => {
+    res.send('this is the default route');
+  });
 app.use('/business',business)
 app.use('/employee',employee)
 app.use('/post',post)

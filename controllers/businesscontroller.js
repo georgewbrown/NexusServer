@@ -88,7 +88,7 @@ router.post('/signin', (req, res) => {
 //         }
 //     )
 // })
-router.get('/', (req, res, next) => {
+router.get('/all', (req, res, next) => {
     Business.findAll()
       .then(res.send.bind(res))
       .catch(next)
