@@ -172,7 +172,7 @@ module.exports = (sequelize, DataTypes) => {
         alowNull: false,
     },
     jobDescription:{
-        type: DataTypes.STRING,
+        type: DataTypes.STRING(1000),
         allowNull: false,
     }
     });

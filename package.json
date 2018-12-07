@@ -5,7 +5,7 @@
   "main": "app.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "nodemon app.js",
+    "start": "node app.js",
     "seed": "node seed.js",
     "seed:associations": "node seedAssociations.js",
     "seed:all": "node seed.js && node seedAssociations.js"
@@ -14,17 +14,24 @@
   "license": "ISC",
   "dependencies": {
     "bcryptjs": "^2.4.3",
-    "bluebird": "^3.5.3",
     "body-parser": "^1.18.2",
     "dotenv": "^5.0.1",
     "express": "^4.16.4",
     "jsonwebtoken": "^8.2.0",
+    "mysql2": "^1.6.4",
     "pg": "^7.4.1",
     "pg-hstore": "^2.3.2",
     "sequelize": "^4.41.2",
-    "volleyball": "^1.5.1"
+    "volleyball": "^1.5.1",
+    "chance": "^1.0.16",
+    "cors": "^2.8.4",
+    "sequelize-cli": "^5.2.0",
+    "event-stream": "^3.3.4"
+
+
   },
   "devDependencies": {
-    "nodemon": "^1.18.6"
+    "nodemon": "^1.18.6",
+    "uuid": "^3.3.2"
   }
 }

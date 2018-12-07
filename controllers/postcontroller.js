@@ -75,22 +75,10 @@ router.put('/update/:id',(req, res) => {
     )
 })
 
-router.put('/:id/business', (req, res, next) => {
-    Post.update(req.body.businessId),{ where: {id: req.params.id,}} 
-      .then(foundBusiness => {
-        if (!foundBusiness) res.sendStatus(404);
-        // return foundBusiness.setPost(req.body.businessId)
-        return foundBusiness.update({businessId: req.body.businessId})
-      })
-      .then(res.send.bind(res))
-      .catch(next);
-  });
-
 router.delete('/delete/:id', validateSession,(req, res) => {
     Post.destroy({
         where: {
             id: req.params.id,
-            // username: req.params.username
         }
     })
     .then(
