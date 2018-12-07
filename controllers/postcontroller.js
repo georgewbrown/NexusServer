@@ -34,7 +34,8 @@ router.get('/all', (req, res) => {
         },
 
         function findAllError(err) {
-            res.status(500).send("Could not All the Post's!")
+            res.status(500).send("Could not GET All the Post's!")
+            console.log(err)
         }
     )
 })
