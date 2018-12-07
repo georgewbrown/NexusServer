@@ -1,4 +1,5 @@
 'use strict';
+
 const chance = require('chance')()
 const bcrypt = require('bcryptjs');
 
@@ -6,9 +7,9 @@ module.exports = {
   up: (queryInterface, Sequelize) => {
     let bizArr = []
 
-    for (let i = 0; i < 1000; i++) {
+    for (let i = 0; i < 100; i++) {
       let name = chance.name({ nationality: 'en' });
-      let email = `${name.slice(0,1)}@gmail.com`.toLowerCase();
+      let email = chance.email()
       let about = chance.paragraph({sentences: 5});
       let phoneNumber = chance.phone();
       let profilePicture = chance.avatar({protocol: 'https'});
