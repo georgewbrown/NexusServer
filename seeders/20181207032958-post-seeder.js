@@ -14,6 +14,7 @@ module.exports = {
         skills: "Auditing",
         jobDescription: chance.paragraph({sentences: 3}),
         businessId: chance.integer({ min: 1, max: 100 }),
+        role:"notadmin",
         createdAt: new Date(Date.now()),
         updatedAt: new Date(Date.now())
       };
