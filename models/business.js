@@ -70,7 +70,7 @@ module.exports = (sequelize, DataTypes) => {
             max: 5
             }
         }
-        
+    
     });
 
     return Business;

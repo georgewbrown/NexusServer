@@ -220,6 +220,10 @@ module.exports = (sequelize, DataTypes) => {
             min: 1,
             max: 5
             }
+    },
+    role: {
+        type: DataTypes.ENUM,
+        values:["admin","notadmin"]
     }
     });
     return Employee;
