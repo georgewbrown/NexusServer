@@ -90,7 +90,7 @@ router.get('/all', (req, res) => {
     )
 })
 
-  router.get('/:id', (req, res) => {
+  router.get('/:id',validateSession, (req, res) => {
     Employee.findOne({ where: {id: req.params.id } })
     .then(employee => res.status(200).json(employee))
     .catch(err => res.status(500).json(err))
@@ -130,7 +130,7 @@ router.put('/update/:id', validateSession,(req, res) => {
     )
 })
 
-router.delete('/delete/:id', (req, res) => {
+router.delete('/delete/:id', validateSession,(req, res) => {
     Employee.destroy({
         where: {
             id: req.params.id,

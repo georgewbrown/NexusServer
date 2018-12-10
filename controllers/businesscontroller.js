@@ -6,7 +6,8 @@ var sequelize = require('../db');
 var Business =  sequelize.import('../models/business')
 var jwt = require('jsonwebtoken');
 const bcrypt = require('bcryptjs');
-const Op = sequelize.Op
+const validateSession = require('../middleware/validate-session');
+const Op = sequelize.Op;
 
 
 router.post('/signup', (req, res) => {
@@ -92,13 +93,13 @@ router.get('/all', (req, res, next) => {
       .catch(next)
   });
 
-  router.get('/:id', (req, res) => {
+  router.get('/:id', validateSession, (req, res) => {
     Business.findOne({ where: {id: req.params.id } })
     .then(business => res.status(200).json(business))
     .catch(err => res.status(500).json(err))
 })
 
-router.put('/update/:id',(req, res) => {
+router.put('/update/:id', validateSession,(req, res) => {
     Business.update({
    name: req.body.name,
    password: req.body.password,
@@ -136,7 +137,7 @@ router.put('/update/:id',(req, res) => {
     )
 })
 
-router.delete('/delete/:id',(req, res) => {
+router.delete('/delete/:id', validateSession,(req, res) => {
     Business.destroy({
         where: {
             id: req.params.id,
