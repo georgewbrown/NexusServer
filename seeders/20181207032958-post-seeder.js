@@ -8,7 +8,7 @@ module.exports = {
           
     for (let i = 1; i < 200; i++) {
       const posts = {
-        jobTitle: chance.name({ nationality: 'en' }),
+        jobTitle: `Job${i}`,
         location: `${chance.city()},${chance.country({ full: true })}`,
         payRange: chance.dollar({ max: 100000}),
         skills: "Auditing",
@@ -24,7 +24,7 @@ module.exports = {
   },
 
   down: (queryInterface, Sequelize) => {
-    return queryInterface.bulkDelete('products', null, {});
+    return queryInterface.bulkDelete('posts', null, {});
 
   }
 };
