@@ -16,9 +16,13 @@ router.post('/signup', (req, res) => {
   let phoneNumber = req.body.phoneNumber
   let location = req.body.location
   let linkdin = req.body.linkdin
+  let faceBook= req.body.faceBook
+  let instagram= req.body.instagram
+  let twitter= req.body.twitter
   let skills = req.body.skills
   let about = req.body.about
   let rating = req.body.rating
+  let role= req.body.role
   Employee.create({
           name: name,
           password: bcrypt.hashSync(password, 10), 
@@ -26,9 +30,13 @@ router.post('/signup', (req, res) => {
           phoneNumber: phoneNumber,           
           location: location,
           linkdin: linkdin,
+          faceBook: faceBook,
+          instagram: instagram,
+          twitter: twitter,
           skills: skills,
           about: about,
-          rating: rating
+          rating: rating,
+          role: role
       })
       .then( 
           signupSuccess = (employee) => {
@@ -106,6 +114,7 @@ router.put('/update/:id', validateSession,(req, res) => {
      linkdin: req.body.linkdin,
      skills: req.body.skills,
      about: req.body.about,
+     role: req.body.role,
      rating: req.body.rating
     },
         {
