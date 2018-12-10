@@ -41,7 +41,7 @@ const server = app.listen(process.env.PORT, () => {
   // and set synchronously by the time we get into this callback function - fancy!
   console.log('Server operating and listening on port', server.address().port, '...');
   // change to force: true whenever you make a change to the db definition
-  sequelize.sync({force:true}) //{force: false} //{force:true}
+  sequelize.sync() //{force: false} //{force:true}
     .then(message => {
       console.log('...and db is synced!');
     })
