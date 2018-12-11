@@ -1,6 +1,10 @@
 
 module.exports = (sequelize, DataTypes) => {
     const Business = sequelize.define('business', {
+    username:{
+        type: DataTypes.STRING,
+        allowNull: false,
+    },
     // THIS VALUE CANNOT BE NULL
     name:{
         type: DataTypes.STRING,

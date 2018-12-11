@@ -3,6 +3,10 @@ let Business =  sequelize.import('../models/business')
 
 module.exports = (sequelize, DataTypes) => {
     const Post = sequelize.define('post', {
+    name:{
+        type: DataTypes.STRING,
+        allowNull: false,
+    },
     jobTitle:{
         type: DataTypes.STRING,
         allowNull: false
