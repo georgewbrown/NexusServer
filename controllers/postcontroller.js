@@ -49,6 +49,7 @@ router.get('/:id', (req, res) => {
 
 router.put('/update/:id',(req, res) => {
    Post.update({
+   name: req.body.name,
    jobTitle: req.body.jobTitle,
    location: req.body.location,
    payRange: req.body.payRange,
