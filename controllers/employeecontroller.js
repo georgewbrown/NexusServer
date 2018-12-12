@@ -10,6 +10,7 @@ const validateSession = require('../middleware/validate-session');
 const Op = sequelize.Op
 
 router.post('/signup', (req, res) => {
+  let username = req.body.username
   let name = req.body.name
   let password = req.body.password
   let email = req.body.email
@@ -24,6 +25,7 @@ router.post('/signup', (req, res) => {
   let rating = req.body.rating
   let role= req.body.role
   Employee.create({
+          username: username,
           name: name,
           password: bcrypt.hashSync(password, 10), 
           email: email, 
@@ -106,6 +108,7 @@ router.get('/all', (req, res) => {
 
 router.put('/update/:id', validateSession,(req, res) => {
     Employee.update({
+     username: username,
      name: req.body.name,
      password: req.body.password,
      email: req.body.email,
