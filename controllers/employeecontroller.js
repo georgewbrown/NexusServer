@@ -9,7 +9,7 @@ const bcrypt = require('bcryptjs');
 const validateSession = require('../middleware/validate-session');
 const Op = sequelize.Op
 
-router.post('/signup', (req, res) => {
+router.post('/signup', async (req, res) => {
   let username = req.body.username
   let name = req.body.name
   let password = req.body.password
@@ -24,7 +24,7 @@ router.post('/signup', (req, res) => {
   let about = req.body.about
   let rating = req.body.rating
   let role= req.body.role
-  Employee.create({
+  await Employee.create({
           username: username,
           name: name,
           password: bcrypt.hashSync(password, 10), 
@@ -54,12 +54,12 @@ router.post('/signup', (req, res) => {
       )
 })
 
-router.post('/signin', (req, res) => {
-    let username = req.body.name
+router.post('/signin', async (req, res) => {
+    let username = req.body.username
     let password = req.body.password
     let email = req.body.email
     console.log(username, email, password)
-    Employee.findOne({where: {[Op.or]: [{email: email}, {name: username}]}})
+    await Employee.findOne({where: {[Op.or]: [{email: email}, {username: username}]}})
     .then((employee) => {
                 if (employee) {
                     console.log("employee")
@@ -85,29 +85,29 @@ router.post('/signin', (req, res) => {
         )
 })
 
-router.get('/all', (req, res) => {
-    Employee.findAll()
+router.get('/all', async (req, res) => {
+    await Employee.findAll()
     .then(
-        function findAllSuccess(employee) {
+         findAllSuccess = (employee) => {
             res.status(200).json({
                 employee
             })
         },
 
-        function findAllError(err) {
+         findAllError = (err) => {
             res.status(500).send("Could not All the Post's!")
         }
     )
 })
 
-  router.get('/:id',validateSession, (req, res) => {
-    Employee.findOne({ where: {id: req.params.id } })
+  router.get('/:id',validateSession, async (req, res) => {
+    await Employee.findOne({ where: {id: req.params.id } })
     .then(employee => res.status(200).json(employee))
     .catch(err => res.status(500).json(err))
 })
 
-router.put('/update/:id', validateSession,(req, res) => {
-    Employee.update({
+router.put('/update/:id', validateSession, async (req, res) => {
+     await Employee.update({
      username: username,
      name: req.body.name,
      password: req.body.password,

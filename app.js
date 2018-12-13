@@ -4,6 +4,7 @@ const express = require('express');
 // instantiate an instance of an express server
 const app = express();
 
+app.use(require('cors')())
 const sequelize = require('./db');
 const bodyParser = require('body-parser');
 
@@ -31,8 +32,8 @@ app.use('/employee',employee)
 app.use('/post',post)
 
 // API routers to serve up data from the server
-app.use('*', (req, res, next) => {
-    res.send('this is the default route');
+app.use('*/*', (req, res, next) => {
+    res.send('404, page not found');
   });
 
 // actually start the server
@@ -41,7 +42,7 @@ const server = app.listen(process.env.PORT, () => {
   // and set synchronously by the time we get into this callback function - fancy!
   console.log('Server operating and listening on port', server.address().port, '...');
   // change to force: true whenever you make a change to the db definition
-  sequelize.sync() //{force: false} //{force:true}
+  sequelize.sync({force:true}) //{force: false} //{force:true}
     .then(message => {
       console.log('...and db is synced!');
     })

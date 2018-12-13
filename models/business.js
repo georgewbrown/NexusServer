@@ -1,6 +1,6 @@
-
 module.exports = (sequelize, DataTypes) => {
     const Business = sequelize.define('business', {
+    // THIS VALUE CANNOT BE NULL
     username:{
         type: DataTypes.STRING,
         allowNull: false,
@@ -76,6 +76,8 @@ module.exports = (sequelize, DataTypes) => {
         }
     
     });
-
+    Business.associate = models => {
+        Business.hasMany(models, {foreignKey: ['post']})
+     }
     return Business;
 }

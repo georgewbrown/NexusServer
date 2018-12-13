@@ -3,7 +3,7 @@ require('dotenv').config();
 var express = require('express');
 var router = express.Router();
 var sequelize = require('../db');
-var Business =  sequelize.import('../models/business')
+const Business = sequelize.import('../models/business')
 var jwt = require('jsonwebtoken');
 const bcrypt = require('bcryptjs');
 const validateSession = require('../middleware/validate-session');
@@ -26,7 +26,7 @@ router.post('/signup', (req, res) => {
   let twitter = req.body.twitter
   let rating = req.body.rating
 
-  Business.create({
+    Business.create({
           username: username,
           name: name,
           password: bcrypt.hashSync(password, 10), 
@@ -56,12 +56,12 @@ router.post('/signup', (req, res) => {
       )
 })
 
-router.post('/signin', (req, res) => {
-    let username = req.body.name
+router.post('/signin', async (req, res) => {
+    let username = req.body.username
     let password = req.body.password
     let email = req.body.email
     console.log(username, email, password)
-    Business.findOne({where: {[Op.or]: [{email: email}, {name: username}]}})
+ await Business.findOne({where: {[Op.or]: [{email: email}, {username: username}]}})
         .then(
             (business) => {
                 if (business) {
@@ -87,23 +87,23 @@ router.post('/signin', (req, res) => {
         )
 })
 
-router.get('/all', (req, res, next) => {
-    Business.findAll({
+router.get('/all', async (req, res, next) => {
+ await Business.findAll({
         include: [{all: true}]
     })
       .then(res.send.bind(res))
       .catch(next)
   });
 
-  router.get('/:id', validateSession, (req, res) => {
-    Business.findOne({ where: {id: req.params.id } })
+  router.get('/:id', validateSession, async (req, res) => {(
+    await Business.findOne({ where: {id: req.params.id }, include: [{all: true}] })
     .then(business => res.status(200).json(business))
     .catch(err => res.status(500).json(err))
-})
+)})
 
-router.put('/update/:id', validateSession,(req, res) => {
-    Business.update({
-   username: username,
+router.post('/update/:id', validateSession, async (req, res) => {
+await Business.update({
+   username: req.body.username,
    name: req.body.name,
    password: req.body.password,
    email: req.body.email,
@@ -117,22 +117,21 @@ router.put('/update/:id', validateSession,(req, res) => {
    twitter: req.body.twitter,
    rating: req.body.rating,
 
-    },
-        {
+    },{
         where: {
             id: req.params.id,
             // name: req.params.name
         }
     })
     .then(
-        function updateSuccess(business) {
+        updateSuccess = (business) => {
             res.status(200).json({
                 Business: business,
                 message: "Business successfully updated!"
             })
         },
 
-        function updateFail(err) {
+        updateFail = (err) => {
             res.status(500).json({
                 message: err.message
             })
@@ -140,28 +139,23 @@ router.put('/update/:id', validateSession,(req, res) => {
     )
 })
 
-router.delete('/delete/:id', validateSession,(req, res) => {
-    Business.destroy({
-        where: {
-            id: req.params.id,
-            // businessname: req.params.username
-        }
-    })
+router.delete('/delete/:id', validateSession, async (req, res) => {(
+    await Business.destroy({ where: { id: req.params.id, } })
     .then(
-        function deleteSuccess(business) {
+         deleteSuccess = (business) => {
             res.status(200).json({
                 Business: business,
                 message: "Business Successfully deleted"
             })
         },
 
-        function deleteFail(err) {
+         deleteFail = (err) => {
             res.status(500).json({
                 error: err.message
             })
         }
     )
-})
+)})
 
 
 

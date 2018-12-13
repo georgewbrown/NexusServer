@@ -3,103 +3,92 @@ require('dotenv').config();
 var express = require('express');
 var router = express.Router();
 var sequelize = require('../db');
-var Post =  sequelize.import('../models/post')
+const Post = sequelize.import('../models/post')
 const validateSession = require('../middleware/validate-session')
 
 
 // post a new post 
 // req.body is the post object
-router.post('/create', validateSession, (req, res, next) => {
-    Post.create(req.body)
+router.post('/create', validateSession, async (req, res,) => {(
+    await Post.create({
+        businessId: req.business.id,
+        name: req.body.name,
+        jobTitle: req.body.jobTitle,
+        location: req.body.location,
+        payRange: req.body.payRange,
+        jobDescription: req.body.jobDescription,
+        skills: req.body.skills,
+    })
     .then(
-        function createPostSuccess (post) {
+            createPostSuccess = (post) => {
                 res.status(200).json ({
                 Post: post,
                 message: 'New Post Created!',
             })
         },
-        function createPostFail(err) {
+            createPostFail = (err) => {
             res.status(500).send(err.message)       
         }
     )
-})
+)})
 
-router.get('/all', (req, res) => {
-    Post.findAll()
+router.get('/all', async (req, res) => {(
+    await Post.findAll({include: 'business'})
     .then(
-        function findAllSuccess(post) {
+            findAllSuccess = (post) => {
             res.status(200).json({
             post
             })
         },
 
-        function findAllError(err) {
+            findAllError = (err) => {
             res.status(500).send("Could not GET All the Post's!")
             console.log(err)
         }
     )
-})
+)})
 
-router.get('/:id', (req, res) => {
-    Post.findOne({ where: {id: req.params.id } })
+router.get('/:id', async (req, res) => {(
+    await Post.findOne({ where: {id: req.params.id }, include: 'business' })
     .then(post => res.status(200).json(post))
     .catch(err => res.status(500).json(err))
-})
+)})
 
 
-router.put('/update/:id',(req, res) => {
-   Post.update({
-   name: req.body.name,
-   jobTitle: req.body.jobTitle,
-   location: req.body.location,
-   payRange: req.body.payRange,
-   skills: req.body.skills,
-   jobDescription: req.body.jobDescription
-    },
-        {
-        where: {
-            id: req.params.id,
-        }
-    })
+router.post('/update/:id', validateSession, async (req, res) => {(
+  await Post.update((req.body),{ where: { id: req.params.id,}})
     .then(
-        function updateSuccess(post) {
+        updateSuccess = (post) => {
             res.status(200).json({
                 Post: post,
                 message: "Post successfully updated!"
             })
         },
 
-        function updateFail(err) {
+        updateFail = (err) => {
             res.status(500).json({
                 message: err.message
             })
         }
     )
-})
+)})
 
-router.delete('/delete/:id', validateSession,(req, res) => {
-    Post.destroy({
-        where: {
-            id: req.params.id,
-        }
-    })
+router.delete('/delete/:id', validateSession, async (req, res) => {(
+  await Post.destroy({ where: { id: req.params.id, } })
     .then(
-        function deleteSuccess(post) {
+         deleteSuccess = (post) => {
             res.status(200).json({
                 Post: post,
                 message: "Post Successfully deleted"
             })
         },
 
-        function deleteFail(err) {
+         deleteFail = (err) => {
             res.status(500).json({
                 error: err.message
             })
         }
     )
-})
-
-
-
+)})
 
 module.exports = router;

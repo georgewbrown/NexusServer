@@ -15,4 +15,12 @@ sequelize.authenticate().then(
     }
     
     );
+    const Business = sequelize.import('./models/business');
+    const Post = sequelize.import('./models/post');
+    
+    Business.hasMany(Post)
+    
+    Post.belongsTo(Business)
+    
+
     module.exports = sequelize;
