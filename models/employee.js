@@ -225,9 +225,10 @@ module.exports = (sequelize, DataTypes) => {
             max: 5
             }
     },
-    role: {
-        type: DataTypes.ENUM,
-        values:["admin","notadmin"]
+    isAdmin: {
+        type: DataTypes.BOOLEAN,
+        defaultValue: false,
+        allowNull: false
     }
     });
     return Employee;
