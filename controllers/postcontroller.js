@@ -48,6 +48,15 @@ router.get('/all', async (req, res) => {(
     )
 )})
 
+// router.get('/businessId/:id', async (req, res) => {
+//     let business = req.body.businessId
+//     console.log(req.body)
+//     Post.findAll({ where: { id: business }, include: [{all: true}] })
+//     .then(post => res.status(200).json(post))
+//     .catch(err => res.status(500).json(err))
+
+// })
+
 router.get('/:id', async (req, res) => {(
     await Post.findOne({ where: {id: req.params.id }, include: 'business' })
     .then(post => res.status(200).json(post))

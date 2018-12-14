@@ -101,7 +101,7 @@ router.get('/all', async (req, res, next) => {
     .catch(err => res.status(500).json(err))
 )})
 
-router.post('/update/:id', validateSession, async (req, res) => {
+router.put('/update/:id', validateSession, async (req, res) => {
 await Business.update({
    username: req.body.username,
    name: req.body.name,
