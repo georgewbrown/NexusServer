@@ -101,43 +101,23 @@ router.get('/all', async (req, res, next) => {
     .catch(err => res.status(500).json(err))
 )})
 
-router.put('/update/:id', validateSession, async (req, res) => {
-await Business.update({
-   username: req.body.username,
-   name: req.body.name,
-   password: req.body.password,
-   email: req.body.email,
-   about: req.body.about,
-   profilePicture: req.body.profilePicture,
-   phoneNumber: req.body.phoneNumber,
-   location: req.body.location,
-   website: req.body.website,
-   faceBook: req.body.faceBook,
-   instagram: req.body.instagram,
-   twitter: req.body.twitter,
-   rating: req.body.rating,
-
-    },{
-        where: {
-            id: req.params.id,
-            // name: req.params.name
-        }
-    })
-    .then(
-        updateSuccess = (business) => {
-            res.status(200).json({
-                Business: business,
-                message: "Business successfully updated!"
-            })
-        },
-
-        updateFail = (err) => {
-            res.status(500).json({
-                message: err.message
-            })
-        }
-    )
-})
+router.put('/update/:id', validateSession, async (req, res) => {(
+    await Business.update((req.body),{ where: { id: req.params.id,}})
+      .then(
+          updateSuccess = (post) => {
+              res.status(200).json({
+                  Post: post,
+                  message: "Business successfully updated!"
+              })
+          },
+  
+          updateFail = (err) => {
+              res.status(500).json({
+                  message: err.message
+              })
+          }
+      )
+  )})
 
 router.delete('/delete/:id', validateSession, async (req, res) => {(
     await Business.destroy({ where: { id: req.params.id, } })

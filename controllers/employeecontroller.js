@@ -106,42 +106,24 @@ router.get('/all', async (req, res) => {
     .catch(err => res.status(500).json(err))
 })
 
-router.put('/update/:id', validateSession, async (req, res) => {
-     await Employee.update({
-     username: username,
-     name: req.body.name,
-     password: req.body.password,
-     email: req.body.email,
-     phoneNumber: req.body.phoneNumber,
-     location: req.body.location,
-     linkdin: req.body.linkdin,
-     skills: req.body.skills,
-     about: req.body.about,
-     role: req.body.role,
-     rating: req.body.rating
-    },
-        {
-        where: {
-            id: req.params.id,
-            // name: req.params.name
-        }
-    })
-    .then(
-        function updateSuccess(employee) {
-            res.status(200).json({
-                Employee: employee,
-                message: "Employee successfully updated!"
-            })
-        },
-
-        function updateFail(err) {
-            res.status(500).json({
-                message: err.message
-            })
-        }
-    )
-})
-
+router.put('/update/:id', validateSession, async (req, res) => {(
+    await Employee.update((req.body),{ where: { id: req.params.id,}})
+      .then(
+          updateSuccess = (post) => {
+              res.status(200).json({
+                  Post: post,
+                  message: "Employee successfully updated!"
+              })
+          },
+  
+          updateFail = (err) => {
+              res.status(500).json({
+                  message: err.message
+              })
+          }
+      )
+  )})
+  
 router.delete('/delete/:id', validateSession,(req, res) => {
     Employee.destroy({
         where: {
