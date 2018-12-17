@@ -64,7 +64,7 @@ router.get('/:id', async (req, res) => {(
 )})
 
 
-router.post('/update/:id', validateSession, async (req, res) => {(
+router.put('/update/:id', validateSession, async (req, res) => {(
   await Post.update((req.body),{ where: { id: req.params.id,}})
     .then(
         updateSuccess = (post) => {
